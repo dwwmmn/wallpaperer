@@ -39,7 +39,7 @@ optional arguments:
 
 Here's a nice picture of Madotsuki, from the classic game Yume Nikki:
 
-![Madotsuki](https://github.com/dwwmmn/wallpaperer/blob/example/madotsuki.jpg)
+![Madotsuki](https://github.com/dwwmmn/wallpaperer/blob/master/example/madotsuki.jpg)
 
 (Note: I looked around for copyright of this image and couldn't find it. It's
 all over the Internet so I figured it was safe. If you own it and are mad that I
@@ -52,7 +52,7 @@ your average HD screen:
 python wallpaperer.py --size 1920x1080 madotsuki.jpg bottom-left
 ```
 
-![Madotsuki wallpaper](https://github.com/dwwmmn/wallpaperer/blob/example/madotsuki-wallpaper.png)
+![Madotsuki wallpaper](https://github.com/dwwmmn/wallpaperer/blob/master/example/madotsuki-wallpaper.png)
 
 Ta-da! Note how wallpaperer detects the background color and extends it to fit
 the whole screen.
