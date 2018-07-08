@@ -6,7 +6,9 @@ have solid color backgrounds that touch the edges. Think vector art and fanart.
 
 ```
 usage: wallpaperer.py [-h] [-c COLOR] [-s SIZE] [--dont-ignore] [--dont-crop]
-                      [--simple]
+                      [--simple] [-r ROTATE]
+                      [--scale-rel-image SCALE_REL_IMAGE]
+                      [--scale-rel-canvas SCALE_REL_CANVAS]
                       filename position
 
 positional arguments:
@@ -31,9 +33,22 @@ optional arguments:
   --dont-crop           Default behavior is to scale images which are too big,
                         maintaining aspect ratio. This flag disables that
                         behavior.
-  --simple              Use a simpler color detection. May be inaccurate but
-                        will work if your image is really big.
+  --simple              Use a simpler color detection. May be less accurate
+                        but will work if your image is really big.
+  -r ROTATE, --rotate ROTATE
+                        Rotate the image clockwise by the number of degrees
+                        given.
+  --scale-rel-image SCALE_REL_IMAGE
+                        Scale to a percentage (written as a decimal) of the
+                        original image.
+  --scale-rel-canvas SCALE_REL_CANVAS
+                        Scale to a percentage (written as a decimal) of the
+                        canvas.
 ```
+
+A word of advice, though: the tool is really simple. If you've tried more than
+three different settings and it still doesn't look good with your image, you
+probably need to just open up PS and do it yourself.
 
 ## Example
 
