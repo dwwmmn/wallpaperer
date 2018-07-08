@@ -182,17 +182,7 @@ def find_background(img):
 
     return max(vote)
 
-def resize_maybe(img, canvas_size):
-    """ Resize the image if it is too big. """
-    width, height = img.size
-    cwidth, cheight = canvas_size
-
-    if (width > cwidth or height > cheight) or DONT_CROP:
-        ratio = min(cwidth / width, cheight / height)
-        scaled = (floor(width * ratio), floor(height * ratio))
-        img.thumbnail(scaled)
-
-def wallpaperer(filename, canvas_size, pos, color=None):
+def wallpaperer(filename, canvas_size, pos, options):
     """ Paste an image onto a specified canvas size. """
 
     # Read in the image
@@ -209,7 +199,10 @@ def wallpaperer(filename, canvas_size, pos, color=None):
     canvas = Image.new("RGB", size=canvas_size, color=color)
 
     # If the image is too big, scale it
-    resize_maybe(img, canvas_size)
+    scale_oper = options.get("scale_oper", None)
+    new_size = calculate_size(img, canvas_size, scale_oper)
+    if new_size != img.size:
+        img = img.resize(new_size)
 
     # Paste onto canvas based on position
     coord = POSITION_VALUES[pos](img.size, canvas_size)
@@ -255,6 +248,10 @@ def main():
     argparser.add_argument("--simple", help="Use a simpler color detection. May be inaccurate but will work if your image is really big.", action="store_true")
 
     args = argparser.parse_args()
+    options = {}
+
+    if args.position not in POSITION_VALUES.keys():
+        sys.exit("wallpaperer.py: Can't place image at '{}'".format(args.position))
 
     DONT_CROP = args.dont_crop
     DONT_IGNORE_EDGES = args.dont_ignore
@@ -275,7 +272,7 @@ def main():
 
     exitcode = 0
     try:
-        wallpaperer(args.filename, args.size, args.position)
+        wallpaperer(args.filename, args.size, args.position, options)
     except IOError as err:
         print(err)
         exitcode = -1
