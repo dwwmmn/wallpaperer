@@ -218,6 +218,31 @@ def wallpaperer(filename, canvas_size, pos, color=None):
     # Save
     canvas.save("output.png")
 
+def calculate_size(img, canvas_size, scale_oper=None):
+    """ Get the new image size i the image if it is too big. """
+
+    width, height = img.size
+    cwidth, cheight = canvas_size
+    new_size = img.size
+
+    if scale_oper is None:
+        # Default behavior is to scale down the image if it's too big.
+        if width > cwidth or height > cheight:
+            ratio = min(cwidth / width, cheight / height)
+            new_size = (floor(width * ratio), floor(height * ratio))
+    else:
+        method, ratio = scale_oper
+
+        if method == "scale_rel_image":
+            new_size = (floor(width * ratio), floor(height * ratio))
+
+        if method == "scale_rel_canvas":
+            new_height = floor(ratio * cheight)
+            ratio = new_height / height
+            new_size = (floor(ratio * width), new_height)
+
+    return new_size
+
 def main():
     argparser = argparse.ArgumentParser()
 
