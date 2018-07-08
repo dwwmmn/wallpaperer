@@ -176,14 +176,13 @@ def wallpaperer(filename, canvas_size, pos, options):
 
     # Read in the image
     img = Image.open(filename)
-
     # Find the background color or use the one provided
     color = options.get("color", None)
     if color is None:
         if options.get("simple", False):
-            color = find_background(img)
+            color = find_background(img, pos)
         else:
-            color = flood_find(img, pos)
+            color = flood_find(img, pos, options.get("ignore_edges", True))
 
     # Create a canvas of proper size and color
     if len(color) == 3:
@@ -239,7 +238,7 @@ def main():
     argparser.add_argument("position", help="Where to place the image. Values are {top-left, top-right, bottom-left, bottom-right, center}.")
     argparser.add_argument("-c", "--color", help="Color to use for the canvas. Color should be RGB or RGBA (comma-separated), or HTML hex colors.")
     argparser.add_argument("-s", "--size", help="Size to read in. This can be two numbers (width and height) separated by an 'x' or it can be one of the following: {{{0}}}.".format(", ".join(SIZES.keys())))
-    argparser.add_argument("--dont-ignore-edges", help="Default behavior ignores edges that are 'covered' by an edge of the canvas. This eliminates scenarios where the foreground runs off the edge of the original image and it's colors accidentally being picked as a background. This flag disables that behavior.", action="store_true")
+    argparser.add_argument("--dont-ignore-edges", help="Default behavior ignores edges that are 'covered' by an edge of the canvas. This eliminates scenarios where the foreground runs off the edge of the original image and it's colors accidentally being picked as a background. This flag disables that behavior.", action="store_false")
     argparser.add_argument("--dont-crop", help="Default behavior is to scale images which are too big, maintaining aspect ratio. This flag disables that behavior.", action="store_true")
     argparser.add_argument("--simple", help="Use a simpler color detection. May be less accurate but will work if your image is really big.", action="store_true")
     argparser.add_argument("-r", "--rotate", help="Rotate the image clockwise by the number of degrees given.")
@@ -278,11 +277,13 @@ def main():
     if args.color is not None:
         if "," in args.color:
             args.color = tuple(int(x) for x in args.color.split(","))
-        
         options["color"] = args.color
 
-    if args.simple is not None:
-        options["simple"] = True
+    options["simple"] = args.simple
+    options["ignore_edges"] = (not args.dont_ignore_edges)
+
+    print(args)
+    print(options)
 
     exitcode = 0
     try:
