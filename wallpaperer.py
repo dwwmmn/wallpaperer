@@ -197,7 +197,7 @@ def wallpaperer(filename, canvas_size, pos, options):
     scale_oper = options.get("scale_oper", None)
     new_size = calculate_size(img, canvas_size, scale_oper)
     if new_size != img.size:
-        img = img.resize(new_size)
+        img = img.resize(new_size, Image.LANCZOS)
 
     # Paste onto canvas based on position
     coord = POSITION_VALUES[pos](img.size, canvas_size)
@@ -281,9 +281,6 @@ def main():
 
     options["simple"] = args.simple
     options["ignore_edges"] = (not args.dont_ignore_edges)
-
-    print(args)
-    print(options)
 
     exitcode = 0
     try:
